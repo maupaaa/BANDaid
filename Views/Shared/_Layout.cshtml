@@ -1,0 +1,71 @@
+@{
+    var isSignedIn = User.Identity?.IsAuthenticated == true;
+    var showDialogs = !isSignedIn && ViewData["NoDialogs"] as bool? != true;
+    var currentUrl = Context.Request.Path + Context.Request.QueryString;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BANDaid</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="site-header">
+        <a class="logo" asp-controller="Home" asp-action="Index" aria-label="BANDaid - home"></a>
+
+        <nav class="main-nav" aria-label="Main">
+            @if (isSignedIn)
+            {
+                <span class="nav-user">@User.Identity!.Name</span>
+            }
+            else
+            {
+                <a asp-controller="Account" asp-action="Login" data-open-dialog="login-dialog">Sign in</a>
+                <a asp-controller="Account" asp-action="Register" data-open-dialog="register-dialog">Register</a>
+            }
+            <a asp-controller="Home" asp-action="Index" asp-fragment="top-charts">Top charts</a>
+            <a asp-controller="Home" asp-action="Index" asp-fragment="reviews">Reviews</a>
+            @if (isSignedIn)
+            {
+                <form asp-controller="Account" asp-action="Logout" method="post" class="nav-form">
+                    <button type="submit">Sign out</button>
+                </form>
+            }
+        </nav>
+    </header>
+
+    <main>
+        @RenderBody()
+    </main>
+
+    <footer class="site-footer">
+        <span>&copy; 2026 BANDaid</span>
+    </footer>
+
+    @if (showDialogs)
+    {
+        <dialog id="login-dialog" class="auth-dialog" aria-labelledby="login-title">
+            @await Html.PartialAsync("_LoginForm",
+                new LoginViewModel { ReturnUrl = currentUrl },
+                new ViewDataDictionary(ViewData) { { "AsDialog", true } })
+        </dialog>
+
+        <dialog id="register-dialog" class="auth-dialog" aria-labelledby="register-title">
+            @await Html.PartialAsync("_RegisterForm",
+                new RegisterViewModel(),
+                new ViewDataDictionary(ViewData) { { "AsDialog", true } })
+        </dialog>
+    }
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

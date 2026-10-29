@@ -1,0 +1,41 @@
+@model RegisterViewModel
+<div class="auth-card">
+    <partial name="_CloseButton" />
+    <h2 id="register-title">Join us</h2>
+
+    <form asp-controller="Account" asp-action="Register" method="post">
+        <div asp-validation-summary="ModelOnly" class="form-error"></div>
+
+        <div class="field">
+            <label for="register-email">Email address</label>
+            <input asp-for="Email" id="register-email" type="email" autocomplete="email" autofocus />
+            <span asp-validation-for="Email" class="field-error"></span>
+        </div>
+
+        <div class="field">
+            <label for="register-username">Username</label>
+            <input asp-for="Username" id="register-username" autocomplete="username" />
+            <span asp-validation-for="Username" class="field-error"></span>
+        </div>
+
+        <div class="field">
+            <label for="register-password">Password</label>
+            <input asp-for="Password" id="register-password" autocomplete="new-password" />
+            <span asp-validation-for="Password" class="field-error"></span>
+            <small class="field-hint">At least 8 characters, with a digit.</small>
+        </div>
+
+        <div class="field">
+            <label for="register-confirm">Repeat password</label>
+            <input asp-for="ConfirmPassword" id="register-confirm" autocomplete="new-password" />
+            <span asp-validation-for="ConfirmPassword" class="field-error"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Create account</button>
+    </form>
+
+    <p class="auth-switch">
+        Already have an account?
+        <a asp-controller="Account" asp-action="Login" data-open-dialog="login-dialog">Sign in</a>
+    </p>
+</div>

@@ -1,0 +1,15 @@
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Sign in";
+    ViewData["NoDialogs"] = true;
+}
+
+<section class="hero hero-dimmed">
+    <div class="hero-text" aria-hidden="true">
+        <h1>Listen. Rate. Discover.</h1>
+        <p>First aid for finding the perfect sound.</p>
+    </div>
+    <div class="auth-page">
+        <partial name="_LoginForm" model="Model" />
+    </div>
+</section>

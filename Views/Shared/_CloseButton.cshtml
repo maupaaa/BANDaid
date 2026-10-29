@@ -1,0 +1,16 @@
+@* Close control for the auth card: a button inside a dialog, a link back home on the standalone page. *@
+@{
+    var asDialog = ViewData["AsDialog"] as bool? == true;
+}
+@if (asDialog)
+{
+    <button type="button" class="auth-close" data-close-dialog aria-label="Close">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 2.5 12 9.5l7-7 2.5 2.5-7 7 7 7-2.5 2.5-7-7-7 7L2.5 19l7-7-7-7z" /></svg>
+    </button>
+}
+else
+{
+    <a class="auth-close" asp-controller="Home" asp-action="Index" aria-label="Close">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 2.5 12 9.5l7-7 2.5 2.5-7 7 7 7-2.5 2.5-7-7-7 7L2.5 19l7-7-7-7z" /></svg>
+    </a>
+}

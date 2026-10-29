@@ -1,0 +1,88 @@
+@model HomeViewModel
+@using System.Globalization
+@{
+    ViewData["Title"] = "Listen. Rate. Discover.";
+    var isSignedIn = User.Identity?.IsAuthenticated == true;
+    var inv = CultureInfo.InvariantCulture;
+}
+
+<section class="hero">
+    <div class="hero-text">
+        <h1>Listen. Rate. Discover.</h1>
+        <p>First aid for finding the perfect sound.</p>
+
+        @if (isSignedIn)
+        {
+            <a class="btn btn-light" asp-controller="Home" asp-action="Index" asp-fragment="top-charts">Explore the charts</a>
+        }
+        else
+        {
+            <a class="btn btn-light" asp-controller="Account" asp-action="Register" data-open-dialog="register-dialog">Join us</a>
+        }
+    </div>
+</section>
+
+<div class="page">
+    <section id="top-charts" class="block">
+        <h2 class="block-title">Top charts</h2>
+
+        @if (Model.TopAlbums.Count == 0)
+        {
+            <p class="empty">No rated albums yet. Once people start reviewing, the best ones will show up here.</p>
+        }
+        else
+        {
+            <ol class="chart">
+                @foreach (var album in Model.TopAlbums)
+                {
+                    <li>
+                        <div class="chart-info">
+                            <span class="chart-title">@album.Title</span>
+                            <span class="chart-artist">@album.ArtistName</span>
+                        </div>
+                        <div class="chart-score">
+                            <strong>@album.AverageRating.ToString("0.0", inv)</strong>
+                            <span>@album.ReviewCount @(album.ReviewCount == 1 ? "review" : "reviews")</span>
+                        </div>
+                    </li>
+                }
+            </ol>
+        }
+    </section>
+
+    <section id="reviews" class="block">
+        <h2 class="block-title">Latest reviews</h2>
+
+        @if (Model.LatestReviews.Count == 0)
+        {
+            <p class="empty">Nobody has written a review yet.</p>
+        }
+        else
+        {
+            <div class="review-grid">
+                @foreach (var review in Model.LatestReviews)
+                {
+                    <article class="review-card">
+                        <header>
+                            <div>
+                                <h3>@review.AlbumTitle</h3>
+                                <span class="chart-artist">@review.ArtistName</span>
+                            </div>
+                            <span class="badge">@review.Rating<small>/10</small></span>
+                        </header>
+
+                        @if (!string.IsNullOrWhiteSpace(review.Text))
+                        {
+                            <p class="review-text">@review.Text</p>
+                        }
+
+                        <footer>
+                            <span>@review.Author</span>
+                            <time datetime="@review.CreatedAt.ToString("yyyy-MM-dd", inv)">@review.CreatedAt.ToString("d MMM yyyy", inv)</time>
+                        </footer>
+                    </article>
+                }
+            </div>
+        }
+    </section>
+</div>
